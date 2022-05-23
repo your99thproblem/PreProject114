@@ -9,22 +9,15 @@ public class Util {
     private String url = "jdbc:mysql://10.115.115.61:3306/KATA";
 
 
-    Connection dbConnection;
+    private Connection dbConnection = null;
 
-    public Connection getDbConnection()
-            throws ClassNotFoundException, SQLException {
+    public Connection getDbConnection() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        try {
             dbConnection = DriverManager.getConnection(url, dbUser, dbPass);
-
-        } catch (SQLException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
-
         return dbConnection;
     }
 }
