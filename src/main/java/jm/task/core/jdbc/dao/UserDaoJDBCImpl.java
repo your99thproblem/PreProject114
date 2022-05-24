@@ -34,9 +34,11 @@ public class UserDaoJDBCImpl implements UserDao {
                 connection.commit();
             } catch (SQLException e) {
                 System.out.println("Table is already exists");
+                connection.rollback();
             }
         } catch (SQLException e) {
             e.printStackTrace();
+
         }
     }
 
@@ -50,6 +52,7 @@ public class UserDaoJDBCImpl implements UserDao {
                 connection.commit();
             } catch (SQLException e) {
                 System.out.println("Table isn't exist");
+                connection.rollback();
             }
 
         } catch (SQLException e) {
@@ -74,6 +77,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
             } catch (SQLException e) {
                 System.out.println("Error while adding user");
+                connection.rollback();
             }
 
         } catch (SQLException e) {
@@ -95,6 +99,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
             } catch (SQLException e) {
                 e.printStackTrace();
+                connection.rollback();
             }
 
         } catch (SQLException e) {
@@ -124,6 +129,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
             } catch (SQLException e) {
                 e.printStackTrace();
+                connection.rollback();
             }
 
         } catch (SQLException e) {
@@ -144,12 +150,12 @@ public class UserDaoJDBCImpl implements UserDao {
 
             } catch (SQLException e) {
                 e.printStackTrace();
+                connection.rollback();
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 }
 
