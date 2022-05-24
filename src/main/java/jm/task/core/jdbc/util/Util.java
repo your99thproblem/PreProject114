@@ -10,19 +10,13 @@ public class Util {
     final String dbPass = "Denis_16";
     final String dBurl = "jdbc:mysql://10.115.115.61:3306/KATA";
 
-    private Util() {
 
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
     public Connection getDbConnection() {
         Connection connection = null;
         try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(dBurl, dbUser, dbPass);
-        } catch (SQLException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
         return connection;
