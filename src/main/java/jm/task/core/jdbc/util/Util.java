@@ -48,7 +48,7 @@ public class Util {
                         .setProperty("hibernate.connection.url", "jdbc:mysql://10.115.115.61:3306/KATA")
                         .setProperty("hibernate.connection.username", "admin")
                         .setProperty("hibernate.connection.password", "Denis_16")
-                        .setProperty("hibernate.hbm2ddl.auto", "update")
+//                        .setProperty("hibernate.hbm2ddl.auto", "update")
                         .addAnnotatedClass(User.class);
 //                     .addAnnotatedClass(User.class);
                 StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());

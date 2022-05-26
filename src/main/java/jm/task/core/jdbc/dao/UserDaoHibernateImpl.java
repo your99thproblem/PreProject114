@@ -23,8 +23,8 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void createUsersTable() {
-        Transaction tr = null;
-        String sqlCreate = "CREATE TABLE IF NOT EXIST users "
+        Transaction tr;
+        String sqlCreate = "CREATE TABLE IF NOT EXISTS users "
                 + "(id INTEGER NOT NULL AUTO_INCREMENT, "
                 + "first VARCHAR(255), "
                 + "last VARCHAR(255), "
@@ -32,14 +32,11 @@ public class UserDaoHibernateImpl implements UserDao {
                 + "PRIMARY KEY ( id ))";
         try (Session session = Util.getSessionFactory().openSession()) {
             tr = session.beginTransaction();
-            session.createSQLQuery(sqlCreate);
+            session.createSQLQuery(sqlCreate).addEntity(User.class).executeUpdate();
             tr.commit();
 
 
         } catch (Exception e) {
-            if (tr != null) {
-                tr.rollback();
-            }
             System.out.println("error while creating table");
         }
 
@@ -48,18 +45,15 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void dropUsersTable() {
-        Transaction tr = null;
-        String sqlDrop = "DROP TABLE users";
+        Transaction tr;
+        String sqlDrop = "DROP TABLE IF EXISTS users";
         try (Session session = Util.getSessionFactory().openSession()) {
             tr = session.beginTransaction();
-            session.createSQLQuery(sqlDrop).executeUpdate();
+            session.createSQLQuery(sqlDrop).addEntity(User.class).executeUpdate();
             tr.commit();
 
 
         } catch (Exception e) {
-            if (tr != null) {
-                tr.rollback();
-            }
             System.out.println("error while drop table");
 
         }
@@ -69,35 +63,30 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void saveUser(String name, String lastName, byte age) {
-        Transaction tr = null;
-        User user = new User(name, lastName, age);
+        Transaction tr;
+
         try (Session session = Util.getSessionFactory().openSession()) {
             tr = session.beginTransaction();
-            session.save(user);
+            session.save(new User(name, lastName, age));
             tr.commit();
-            System.out.println("User with name: " + user.getName() + " add to DataBase successfully");
+            System.out.println("User with name: " + name + " add to DataBase successfully");
 
         } catch (Exception e) {
-            if (tr != null) {
-                tr.rollback();
-            }
             System.out.println("Error while adding user");
         }
-
-
     }
 
     @Override
     public void removeUserById(long id) {
-        Transaction tr = null;
+        Transaction tr;
         try (Session session = Util.getSessionFactory().openSession()) {
             tr = session.beginTransaction();
-            session.delete(session.get(User.class, id));
+            User user = new User();
+            user.setId(id);
+            session.delete(user);
             tr.commit();
         } catch (Exception e) {
-            if (tr != null) {
-                tr.rollback();
-            }
+            System.out.println("Error while removing user");
         }
 
 
@@ -105,44 +94,38 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public List<User> getAllUsers() {
-        Transaction tr = null;
+        Transaction tr;
         List<User> users = new ArrayList<>();
         try (Session session = Util.getSessionFactory().openSession()) {
             tr = session.beginTransaction();
             CriteriaBuilder cb = session.getCriteriaBuilder();
             CriteriaQuery<User> cq = cb.createQuery(User.class);
             Root<User> root = cq.from(User.class);
-
             Query<User> query = session.createQuery(cq);
             users = query.getResultList();
-//            users = session.createCriteria(User.class).list();
             tr.commit();
             for (Iterator<User> it = users.iterator(); it.hasNext(); ) {
                 User user = it.next();
                 System.out.println(user);
 
             }
-        } catch (HibernateException e) {
-            if (tr != null) {
-                tr.rollback();
-            };
+        } catch (Exception e) {
+            System.out.println("Error while getting users");
+
         }
         return users;
     }
 
     @Override
     public void cleanUsersTable() {
-        Transaction tr = null;
+        Transaction tr;
         try (Session session = Util.getSessionFactory().openSession()) {
             tr = session.beginTransaction();
             session.createQuery("delete User").executeUpdate();
             tr.commit();
 
-        } catch (HibernateException e) {
-            if (tr != null) {
-                tr.rollback();
-            }
-            System.out.println("error while truncating table");
+        } catch (Exception e) {
+            System.out.println("Error while cleaning table");
         }
 
 
