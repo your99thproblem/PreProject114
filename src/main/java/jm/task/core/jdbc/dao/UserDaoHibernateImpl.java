@@ -84,7 +84,8 @@ public class UserDaoHibernateImpl implements UserDao {
         SessionFactory sf = Util.getSessionFactory();
         try (Session session = sf.openSession()) {
             session.beginTransaction();
-            session.delete(session.get(User.class, id));
+//            session.delete(id);
+            session.createQuery("DELETE from User WHERE id =:id").setParameter("id", id).executeUpdate();
             session.getTransaction().commit();
         } catch (Exception e) {
             sf.getCurrentSession().getTransaction().rollback();
@@ -119,7 +120,7 @@ public class UserDaoHibernateImpl implements UserDao {
         SessionFactory sf = Util.getSessionFactory();
         try (Session session = sf.openSession()) {
             session.beginTransaction();
-            session.createQuery("delete FROM User").executeUpdate();
+            session.createNativeQuery("TRUNCATE table users").executeUpdate();
             session.getTransaction().commit();
 
         } catch (Exception e) {

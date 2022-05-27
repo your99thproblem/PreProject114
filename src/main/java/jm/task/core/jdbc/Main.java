@@ -15,10 +15,10 @@ public class Main {
         userDaoHibernate.saveUser("Jenia", "Shkalikov", (byte) 36);
         userDaoHibernate.saveUser("Sergey", "Aksenov", (byte) 35);
         userDaoHibernate.saveUser("Nikita", "Aksenov", (byte) 28);
-        userDaoHibernate.removeUserById(1);
+        userDaoHibernate.removeUserById(13);
         userDaoHibernate.getAllUsers();
-        userDaoHibernate.cleanUsersTable();
-        userDaoHibernate.dropUsersTable();
+//        userDaoHibernate.cleanUsersTable();
+//        userDaoHibernate.dropUsersTable();
         System.out.println("End of program");
 
     }
